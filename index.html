@@ -30,17 +30,6 @@
         #sidebar.open {
             left: 0;
         }
-        #sidebar-toggle {
-            position: absolute;
-            left: 10px;
-            top: 10px;
-            z-index: 1;
-            background-color: #ffffff;
-            border: 1px solid #e0e0e0;
-            border-radius: 5px;
-            padding: 10px;
-            cursor: pointer;
-        }
         #sidebar-toggle:hover {
             background-color: #f0f0f0;
         }
@@ -123,6 +112,19 @@
                 margin: 5px 0;
             }
         }
+
+        #sidebar-toggle {
+            position: absolute;
+            left: 10px;
+            top: 10px;
+            width: 100px;
+            z-index: 1;
+            background-color: #ffffff;
+            border: 1px solid #e0e0e0;
+            border-radius: 5px;
+            padding: 10px;
+            cursor: pointer;
+        }
         .modal {
             display: none;
             position: fixed;
@@ -174,7 +176,7 @@
             background: linear-gradient(135deg, #e53935, #f44336);
         }
         #sidebar-toggle.open {
-            left: 260px;
+            left: 60px;
         }
     </style>
     <script>
