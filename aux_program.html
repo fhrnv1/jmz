@@ -1,0 +1,403 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>截码战辅助程序</title>
+    <style>
+        /* 设置全局样式，包括过渡效果 */
+        * {
+            box-sizing: border-box;
+            transition: all 0.2s ease;
+        }
+        /* 设置页面主体样式，包括背景、布局等 */
+        body {
+            font-family: -apple-system, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background: #ffffff;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+            position: relative;
+        }
+        /* 设置侧边栏的默认样式 */
+        #sidebar {
+            position: fixed;
+            left: -250px;
+            top: 0;
+            width: 250px;
+            height: 100%;
+            background-color: #f8f9fa;
+            box-shadow: 2px 0 10px rgba(0, 0, 0, 0.1);
+            transition: left 0.3s ease;
+            z-index: 1000;
+        }
+        /* 设置侧边栏打开时的样式 */
+        #sidebar.open {
+            left: 0;
+        }
+        /* 设置侧边栏开关按钮的样式 */
+        #sidebar-toggle {
+            position: absolute;
+            left: 10px;
+            top: 10px;
+            z-index: 1;
+            background-color: #ffffff;
+            border: 1px solid #e0e0e0;
+            border-radius: 5px;
+            padding: 10px;
+            cursor: pointer;
+        }
+        /* 设置侧边栏开关按钮的鼠标悬停效果 */
+        #sidebar-toggle:hover {
+            background-color: #f0f0f0;
+        }
+        /* 设置侧边栏列表样式 */
+        #sidebar ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+        /* 设置侧边栏列表项样式 */
+        #sidebar ul li {
+            padding: 0;
+            border-bottom: 1px solid #e0e0e0;
+        }
+        /* 设置侧边栏链接样式 */
+        #sidebar ul li a {
+            display: block;
+            padding: 15px;
+            text-decoration: none;
+            color: #333333;
+        }
+        /* 设置当前选中链接样式 */
+        #sidebar ul li a.current {
+            color: #4a90e2;
+        }
+        /* 设置侧边栏列表项的鼠标悬停效果 */
+        #sidebar ul li:hover {
+            background-color: #e0e0e0;
+        }
+        /* 设置顶部容器样式，用于布局数字框 */
+        .top-container {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+        /* 设置数字框样式 */
+        .number-box {
+            background: white;
+            border: 2px solid #4a90e2;
+            border-radius: 15px;
+            padding: 20px;
+            min-height: 120px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+            position: relative;
+        }
+        /* 设置固定数字样式 */
+        .fixed-number {
+            font-size: 36px;
+            color: #4a90e2;
+            font-weight: 900;
+            user-select: none;
+            position: absolute;
+            top: 15px;
+            left: 15px;
+            pointer-events: none;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.1);
+        }
+        /* 设置可编辑内容样式 */
+        .editable-content {
+            font-size: 28px;
+            color: #2d3436;
+            min-height: 50px;
+            margin-top: 50px;
+            padding: 5px;
+            line-height: 1.4;
+        }
+        /* 设置输入组样式 */
+        .input-group {
+            margin-bottom: 15px;
+        }
+        /* 设置文本输入框样式 */
+        .text-input {
+            width: 100%;
+            font-size: 24px;
+            padding: 10px;
+            border: 2px solid #00b894;
+            border-radius: 10px;
+            margin-bottom: 8px;
+            background: white;
+            box-shadow: inset 0 2px 4px rgba(0,0,0,0.05);
+        }
+        /* 设置索引输入框样式 */
+        .index-input {
+            width: 100%;
+            font-size: 20px;
+            padding: 8px;
+            border: 2px solid #fdcb6e;
+            border-radius: 8px;
+            text-align: center;
+            background: white;
+        }
+        /* 设置按钮组样式 */
+        .button-group {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin-top: 10px;
+        }
+        /* 设置操作按钮样式 */
+        .action-btn {
+            font-size: 20px;
+            padding: 14px;
+            border: none;
+            border-radius: 12px;
+            color: white;
+            background: #00b894;
+            cursor: pointer;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        /* 设置操作按钮的鼠标悬停效果 */
+        .action-btn:hover {
+            filter: brightness(1.1);
+            transform: translateY(-1px);
+        }
+        /* 设置操作按钮的鼠标点击效果 */
+        .action-btn:active {
+            transform: translateY(0);
+        }
+        /* 设置清除按钮样式 */
+        .clear-btn {
+            background: #d63031;
+        }
+
+        /* 自定义确认弹窗样式 */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+        }
+        
+        .modal {
+            background: white;
+            border-radius: 12px;
+            padding: 24px;
+            width: 400px;
+            max-width: 90%;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+        }
+        
+        .modal-buttons {
+            display: flex;
+            justify-content: flex-end;
+            gap: 12px;
+            margin-top: 24px;
+        }
+        
+        .modal-btn {
+            padding: 8px 16px;
+            border-radius: 8px;
+            border: none;
+            cursor: pointer;
+            font-size: 16px;
+        }
+        
+        .modal-btn.confirm {
+            background: #00b894;
+            color: white;
+        }
+        
+        .modal-btn.cancel {
+            background: #e0e0e0;
+            color: #333;
+        }
+
+        /* 响应式设计，当屏幕宽度大于600px时，调整顶部容器布局 */
+        @media (min-width: 600px) {
+            .top-container {
+                grid-template-columns: repeat(4, 1fr);
+            }
+        }
+    </style>
+    <!-- 自定义确认弹窗 -->
+    <div class="modal-overlay" id="confirmModal">
+        <div class="modal">
+            <p id="modalMessage">确认要执行此操作吗？</p>
+            <div class="modal-buttons">
+                <button class="modal-btn cancel" onclick="hideModal()">取消</button>
+                <button class="modal-btn confirm" onclick="confirmAction()">确认</button>
+            </div>
+        </div>
+    </div>
+    <script>
+        /* 显示自定义确认弹窗 */
+        function showModal(message, callback) {
+            const modal = document.getElementById('confirmModal');
+            document.getElementById('modalMessage').textContent = message;
+            modal.style.display = 'flex';
+            modal._callback = callback;
+        }
+
+        /* 隐藏自定义确认弹窗 */
+        function hideModal() {
+            document.getElementById('confirmModal').style.display = 'none';
+        }
+
+        /* 确认操作 */
+        function confirmAction() {
+            const modal = document.getElementById('confirmModal');
+            if (modal._callback) {
+                modal._callback();
+            }
+            hideModal();
+        }
+
+        /* 切换侧边栏显示与隐藏 */
+        function toggleSidebar() {
+            const sidebar = document.getElementById('sidebar');
+            const toggleButton = document.getElementById('sidebar-toggle');
+            const isOpen = sidebar.classList.toggle('open');
+            toggleButton.style.display = isOpen ? 'none' : 'block';
+        }
+
+        /* 监听全局点击事件，用于判断是否点击侧边栏外部以关闭侧边栏 */
+        document.addEventListener('click', function(event) {
+            const sidebar = document.getElementById('sidebar');
+            const toggleButton = document.getElementById('sidebar-toggle');
+            const isClickInside = sidebar.contains(event.target) || toggleButton.contains(event.target);
+            
+            if (!isClickInside && sidebar.classList.contains('open')) {
+                sidebar.classList.remove('open');
+                toggleButton.style.display = 'block';
+            }
+        });
+    </script>
+        <!-- 侧边栏，包含导航链接 -->
+        <div id="sidebar">
+            <ul>
+                <li><a href="index.html">截码战</a></li>
+                <li><a href="aux_program.html" class="current">辅助程序界面</a></li>
+            </ul>
+        </div>
+        <!-- 侧边栏开关按钮 -->
+        <button id="sidebar-toggle" onclick="toggleSidebar()">☰</button>
+</head>
+<body>
+    <!-- 顶部容器，用于布局数字框 -->
+    <div class="top-container">
+        <!-- 数字框，包含固定数字和可编辑内容 -->
+        <div class="number-box">
+            <div> <span class="fixed-number">1</span> <span contenteditable="true"></span></div>
+            <div class="editable-content" id="content1" contenteditable="true"></div>
+        </div>
+        <div class="number-box">
+            <div class="fixed-number">2</div>
+            <div class="editable-content" id="content2" contenteditable="true"></div>
+        </div>
+        <div class="number-box">
+            <div class="fixed-number">3</div>
+            <div class="editable-content" id="content3" contenteditable="true"></div>
+        </div>
+        <div class="number-box">
+            <div class="fixed-number">4</div>
+            <div class="editable-content large-font" id="content4" contenteditable="true"></div>
+        </div>
+    </div>
+
+    <!-- 输入组，包含文本输入框和索引输入框 -->
+    <div class="input-group">
+        <input type="text" class="text-input" placeholder="输入文字">
+        <input type="number" class="index-input" min="1" max="4" placeholder="序号">
+    </div>
+    <div class="input-group">
+        <input type="text" class="text-input" placeholder="输入文字">
+        <input type="number" class="index-input" min="1" max="4" placeholder="序号">
+    </div>
+    <div class="input-group">
+        <input type="text" class="text-input" placeholder="输入文字">
+        <input type="number" class="index-input" min="1" max="4" placeholder="序号">
+    </div>
+
+    <!-- 按钮组，包含确认添加和全部清空按钮 -->
+    <div class="button-group">
+        <button class="action-btn" onclick="confirmInputs()">确认添加</button>
+        <button class="action-btn clear-btn" onclick="clearAll()">全部清空</button>
+    </div>
+
+    <script>
+        // 从localStorage恢复内容
+        function loadContent() {
+            for (let i = 1; i <= 4; i++) {
+                const content = localStorage.getItem(`content${i}`);
+                if (content) {
+                    document.getElementById(`content${i}`).innerHTML = content;
+                }
+            }
+        }
+
+        // 保存内容到localStorage
+        function saveContent() {
+            for (let i = 1; i <= 4; i++) {
+                const content = document.getElementById(`content${i}`).innerHTML;
+                localStorage.setItem(`content${i}`, content);
+            }
+        }
+
+        /* 确认输入内容并添加到相应可编辑区域 */
+        function confirmInputs() {
+            showModal('确认要添加这些内容吗？', function() {
+            
+                const inputs = document.querySelectorAll('.input-group');
+                inputs.forEach(group => {
+                    const textInput = group.querySelector('.text-input');
+                    const indexInput = group.querySelector('.index-input');
+                    
+                    if (textInput.value && indexInput.value) {
+                        const target = document.getElementById(`content${indexInput.value}`);
+                        if (target) {
+                            // 自动生成序号
+                            const childCount = target.children.length;
+                            const content = `${childCount + 1}. ${textInput.value}`;
+                            target.innerHTML += `<div>${content}</div>`;
+                            textInput.value = '';
+                            indexInput.value = '';
+                        }
+                    }
+                });
+                saveContent();
+            });
+        }
+
+        /* 清空所有可编辑区域的内容 */
+        function clearAll() {
+            showModal('确定要清空所有内容吗？', function() {
+            
+                document.querySelectorAll('.editable-content').forEach(area => {
+                    area.innerHTML = '';
+                });
+                document.querySelectorAll('.text-input, .index-input').forEach(input => {
+                    input.value = '';
+                });
+                saveContent();
+            });
+        }
+
+        // 初始化
+        window.onload = function() {
+            loadContent();
+        };
+
+    </script>
+</body>
+</html>
