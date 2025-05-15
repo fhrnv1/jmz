@@ -1,0 +1,272 @@
+/* category_manager.css - 类别管理页面专用样式 */
+
+.header {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 64px;
+    background-color: #ffffff;
+    box-shadow: 0 2px 15px rgba(0, 0, 0, 0.08);
+    display: flex;
+    align-items: center;
+    padding: 0 20px;
+    z-index: 900;
+    transition: all 0.3s ease;
+}
+
+#back-button {
+    display: flex;
+    align-items: center;
+    padding: 10px 18px;
+    background-color: #4a90e2;
+    border: none;
+    border-radius: 25px;
+    cursor: pointer;
+    font-size: 16px;
+    color: white;
+    font-weight: 500;
+    transition: all 0.3s ease;
+    box-shadow: 0 2px 8px rgba(74, 144, 226, 0.3);
+}
+
+#back-button:hover {
+    background-color: #3a7bc8;
+    transform: translateX(-3px);
+    box-shadow: 0 4px 12px rgba(74, 144, 226, 0.4);
+}
+
+#back-button:active {
+    transform: translateX(-1px);
+    box-shadow: 0 2px 5px rgba(74, 144, 226, 0.3);
+}
+
+.back-icon {
+    font-size: 20px;
+    margin-right: 8px;
+}
+
+.page-title {
+    flex: 1;
+    text-align: center;
+    font-size: 20px;
+    font-weight: 600;
+    color: #333;
+    margin: 0;
+    background: linear-gradient(135deg, #4a90e2, #3498db);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    transition: all 0.3s ease;
+}
+
+.spacer {
+    width: 80px; /* 与返回按钮宽度大致相同，保持标题居中 */
+}
+
+.container {
+    max-width: 900px;
+    margin: 80px auto 20px;
+    padding: 20px;
+    background-color: #ffffff;
+    border-radius: 10px;
+    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
+}
+
+h1 {
+    text-align: center;
+    color: #333;
+    margin-bottom: 30px;
+    font-size: 28px;
+    display: none; /* 隐藏原标题，因为我们现在使用header中的标题 */
+}
+
+h2 {
+    color: #444;
+    margin: 25px 0 15px;
+    font-size: 22px;
+}
+
+.selection-mode {
+    display: flex;
+    justify-content: center;
+    gap: 30px;
+    margin-bottom: 20px;
+    padding: 15px;
+    background-color: #f5f7fa;
+    border-radius: 8px;
+}
+
+.selection-mode label {
+    display: flex;
+    align-items: center;
+    font-size: 16px;
+    cursor: pointer;
+}
+
+.selection-mode input[type="radio"] {
+    margin-right: 8px;
+    transform: scale(1.2);
+}
+
+.category-actions {
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+    margin-bottom: 25px;
+}
+
+.category-actions button {
+    padding: 8px 15px;
+    background-color: #f0f2f5;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.category-actions button:hover {
+    background-color: #e4e7ec;
+    border-color: #ccc;
+}
+
+.categories-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 15px;
+    margin-bottom: 30px;
+}
+
+.category-item {
+    background-color: #f8f9fa;
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+    padding: 15px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    display: flex;
+    align-items: center;
+}
+
+.category-item:hover {
+    background-color: #eef2f7;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
+}
+
+.category-item.selected {
+    background-color: #e3f2fd;
+    border-color: #90caf9;
+}
+
+.category-item.excluded {
+    background-color: #ffebee;
+    border-color: #ffcdd2;
+    text-decoration: line-through;
+}
+
+.category-item input[type="checkbox"] {
+    margin-right: 10px;
+    transform: scale(1.2);
+}
+
+.preview-section {
+    background-color: #f5f7fa;
+    border-radius: 8px;
+    padding: 20px;
+    margin-bottom: 30px;
+}
+
+.sample-words {
+    background-color: white;
+    border: 1px solid #e0e0e0;
+    border-radius: 6px;
+    padding: 15px;
+    min-height: 80px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+.word-chip {
+    background-color: #e3f2fd;
+    color: #1565c0;
+    padding: 5px 12px;
+    border-radius: 16px;
+    font-size: 14px;
+    display: inline-block;
+    margin-bottom: 5px;
+}
+
+.action-buttons {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+}
+
+.primary-button, .secondary-button {
+    padding: 12px 25px;
+    border-radius: 6px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.primary-button {
+    background-color: #4a90e2;
+    color: white;
+    border: none;
+    box-shadow: 0 2px 5px rgba(74, 144, 226, 0.3);
+}
+
+.primary-button:hover {
+    background-color: #3a7bc8;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 10px rgba(74, 144, 226, 0.4);
+}
+
+.secondary-button {
+    background-color: #f8f9fa;
+    color: #555;
+    border: 1px solid #ddd;
+}
+
+.secondary-button:hover {
+    background-color: #eaeaea;
+}
+
+/* 响应式调整 */
+@media (max-width: 768px) {
+    .container {
+        padding: 15px;
+        margin-top: 80px;
+    }
+    
+    .categories-grid {
+        grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+    }
+    
+    .selection-mode {
+        flex-direction: column;
+        gap: 10px;
+        align-items: flex-start;
+    }
+    
+    .category-actions {
+        flex-wrap: wrap;
+    }
+}
+
+@media (max-width: 480px) {
+    .categories-grid {
+        grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+    }
+    
+    .action-buttons {
+        flex-direction: column;
+    }
+    
+    .primary-button, .secondary-button {
+        width: 100%;
+    }
+}

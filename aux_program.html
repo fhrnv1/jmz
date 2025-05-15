@@ -3,7 +3,16 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="description" content="截码战辅助程序界面">
+    <meta name="theme-color" content="#4a90e2">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
     <title>截码战辅助程序</title>
+    <link rel="manifest" href="manifest.json">
+    <link rel="shortcut icon" href="img/favicon.ico">
+    <link rel="apple-touch-icon" href="img/icon-192x192.png">
+    <link rel="stylesheet" href="css/common.css">
+    <link rel="stylesheet" href="css/aux_program.css">
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -16,127 +25,8 @@
             min-height: 100vh;
             position: relative;
         }
-        /* 移动端布局调整 - 更显著的调整 */
-        @media (max-width: 600px) {
-            body {
-                padding-top: 100px !important;
-            }
-            .top-container {
-                margin-top: 40px !important;
-            }
-            #sidebar-toggle {
-                top: 110px !important;
-            }
-            .input-group {
-                margin-top: 30px !important;
-            }
-            .button-group {
-                margin-top: 40px !important;
-            }
-        }
-        /* 设置侧边栏的默认样式 */
-        #sidebar {
-            position: fixed;
-            left: -250px;
-            top: 0;
-            width: 250px;
-            height: 100%;
-            background-color: #f8f9fa;
-            box-shadow: 2px 0 10px rgba(0, 0, 0, 0.1);
-            transition: left 0.3s ease;
-            z-index: 1000;
-        }
-        /* 侧边栏关闭按钮样式 */
-        .sidebar-close-btn {
-            position: absolute;
-            right: 10px;
-            top: 10px;
-            width: 30px;
-            height: 30px;
-            background: none;
-            border: none;
-            font-size: 24px;
-            cursor: pointer;
-            color: #666;
-            padding: 0;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-        .sidebar-close-btn:hover {
-            color: #333;
-        }
-        /* 设置侧边栏打开时的样式 */
-        #sidebar.open {
-            left: 0;
-        }
-        /* 设置侧边栏开关按钮的样式 */
-        #sidebar-toggle {
-            position: fixed;
-            left: 10px;
-            top: 10px;
-            width: 15vw;
-            min-width: 60px;
-            max-width: 100px;
-            z-index: 1;
-            background-color: #ffffff;
-            border: 1px solid #e0e0e0;
-            border-radius: 5px;
-            padding: 1.5vw;
-            cursor: pointer;
-            font-size: 1.5rem;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-            transition: all 0.3s ease;
-        }
-        /* 设置侧边栏开关按钮的鼠标悬停效果 */
-        #sidebar-toggle:hover {
-            background-color: #f0f0f0;
-            transform: scale(1.05);
-        }
-        /* 响应式调整 */
-        @media (max-width: 600px) {
-            #sidebar-toggle {
-                padding: 3vw;
-                width: 20vw;
-                min-width: 50px;
-            }
-        }
-        @media (max-width: 400px) {
-            #sidebar-toggle {
-                font-size: 1.2rem;
-                padding: 2vw;
-            }
-        }
-        /* 设置侧边栏列表样式 */
-        #sidebar ul {
-            list-style: none;
-            padding: 0;
-            margin: 60px 0 0 0;
-        }
-        /* 设置侧边栏列表项样式 */
-        #sidebar ul li {
-            padding: 0;
-            border-top: 1px solid #e0e0e0;
-            border-bottom: 1px solid #e0e0e0;
-        }
-        /* 设置侧边栏链接样式 */
-        #sidebar ul li a {
-            display: block;
-            padding: 15px;
-            text-decoration: none;
-            color: #333333;
-        }
-        /* 设置当前选中链接样式 */
-        #sidebar ul li a.current {
-            color: #4a90e2;
-        }
-        /* 设置侧边栏列表项的鼠标悬停效果 */
-        #sidebar ul li:hover {
-            background-color: #e0e0e0;
-        }
+        /* 移动端布局调整已移至aux_program.css */
+        /* 辅助程序页面特有样式 */
         /* 设置顶部容器样式，用于布局数字框 */
         .top-container {
             display: grid;
@@ -226,131 +116,9 @@
             margin: 20px 0;
             padding: 10px 0;
         }
-        button {
-            margin: 10px;
-            padding: 15px 30px;
-            font-size: 1.2em;
-            border: 1px solid #e0e0e0;
-            border-radius: 5px;
-            cursor: pointer;
-            background-color: #ffffff;
-            color: #333333;
-            transition: background-color 0.3s ease;
-            width: 50%;
-            max-width: 300px;
-        }
-        button:hover {
-            background-color: #f0f0f0;
-        }
-        .action-btn {
-            width: 130px;
-            background-color: #4a90e2;
-            color: white;
-            border: none;
-            border-radius: 8px;
-            transition: all 0.2s ease;
-            font-weight: 500;
-            padding: 12px 24px;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-        }
-        .action-btn:hover {
-            background-color: #3a7bd5;
-            transform: translateY(-1px);
-            box-shadow: 0 4px 8px rgba(0,0,0,0.15);
-        }
-        .action-btn:active {
-            background-color: #2d6bcb;
-            transform: translateY(0);
-            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-        }
+        /* 按钮样式已移至aux_program.css */
 
-        .clear-btn {
-            background-color: #f44336;
-            color: white;
-            border: none;
-            border-radius: 8px;
-            transition: all 0.2s ease;
-            font-weight: 500;
-            padding: 12px 24px;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-        }
-        .clear-btn:hover {
-            background-color: #e53935;
-            transform: translateY(-1px);
-            box-shadow: 0 4px 8px rgba(0,0,0,0.15);
-        }
-        .clear-btn:active {
-            background-color: #d32f2f;
-            transform: translateY(0);
-            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-        }
-        @keyframes ripple {
-            0% {
-                transform: scale(0, 0);
-                opacity: 0.5;
-            }
-            100% {
-                transform: scale(20, 20);
-                opacity: 0;
-            }
-        }
-
-        .modal {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(0, 0, 0, 0.5);
-            justify-content: center;
-            align-items: center;
-            z-index: 1000;
-            opacity: 0;
-            transition: opacity 0.3s ease;
-        }
-        .modal.show {
-            opacity: 1;
-            display: flex;
-        }
-        .modal-content {
-            background-color: white;
-            padding: 30px;
-            border-radius: 15px;
-            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
-            text-align: center;
-            max-width: 400px;
-            width: 90%;
-        }
-        .modal-buttons {
-            margin-top: 20px;
-            display: flex;
-            justify-content: space-between;
-        }
-        .modal-buttons button {
-            margin: 0 5px;
-            padding: 12px 24px;
-            font-size: 1em;
-            border: none;
-            border-radius: 8px;
-            cursor: pointer;
-            transition: background 0.3s ease;
-            flex: 1;
-        }
-        .modal-buttons button.confirm {
-            background: linear-gradient(135deg, #4CAF50, #45a049);
-            color: white;
-        }
-        .modal-buttons button.confirm:hover {
-            background: linear-gradient(135deg, #45a049, #4CAF50);
-        }
-        .modal-buttons button.cancel {
-            background: linear-gradient(135deg, #f44336, #e53935);
-            color: white;
-        }
-        .modal-buttons button.cancel:hover {
-            background: linear-gradient(135deg, #e53935, #f44336);
-        }
+        /* Modal样式已在common.css中定义 */
 
         /* 响应式设计，当屏幕宽度大于600px时，调整顶部容器布局 */
         @media (min-width: 600px) {
@@ -359,67 +127,44 @@
             }
         }
     </style>
-    <!-- 自定义确认弹窗 -->
-    <div class="modal" id="confirmModal">
+    <!-- 确认弹窗 -->
+    <div id="confirmModal" class="modal">
         <div class="modal-content">
-            <p id="modalMessage">确认要执行此操作吗？</p>
+            <p id="confirmMessage">确认要执行此操作吗？</p>
             <div class="modal-buttons">
-                <button class="modal-btn confirm" onclick="confirmAction()">确认</button>
-                <button class="modal-btn cancel" onclick="hideModal()">取消</button>
+                <button class="confirm" onclick="handleConfirm(true)">确定</button>
+                <button class="cancel" onclick="handleConfirm(false)">取消</button>
             </div>
         </div>
     </div>
-    <script>
-        /* 显示自定义确认弹窗 */
-        function showModal(message, callback) {
-            const modal = document.getElementById('confirmModal');
-            document.getElementById('modalMessage').textContent = message;
-            modal.classList.add('show');
-            modal._callback = callback;
-        }
-
-        /* 隐藏自定义确认弹窗 */
-        function hideModal() {
-            const modal = document.getElementById('confirmModal');
-            modal.classList.remove('show');
-        }
-
-        /* 确认操作 */
-        function confirmAction() {
-            const modal = document.getElementById('confirmModal');
-            if (modal._callback) {
-                modal._callback();
-            }
-            hideModal();
-        }
-
-        /* 切换侧边栏显示与隐藏 */
-        function toggleSidebar() {
-            const sidebar = document.getElementById('sidebar');
-            const toggleButton = document.getElementById('sidebar-toggle');
-            const isOpen = sidebar.classList.toggle('open');
-            toggleButton.style.display = isOpen ? 'none' : 'block';
-        }
-
-        /* 监听全局点击事件，用于判断是否点击侧边栏外部以关闭侧边栏 */
-        document.addEventListener('click', function(event) {
-            const sidebar = document.getElementById('sidebar');
-            const toggleButton = document.getElementById('sidebar-toggle');
-            const isClickInside = sidebar.contains(event.target) || toggleButton.contains(event.target);
-            
-            if (!isClickInside && sidebar.classList.contains('open')) {
-                sidebar.classList.remove('open');
-                toggleButton.style.display = 'block';
-            }
-        });
-    </script>
+    
+    <!-- 提示弹窗 -->
+    <div id="alertModal" class="modal">
+        <div class="modal-content">
+            <p id="alertMessage"></p>
+            <div class="modal-buttons">
+                <button class="confirm" onclick="closeAlert()">确定</button>
+            </div>
+        </div>
+    </div>
+    <script src="js/common.js"></script>
+    <script src="js/aux_program.js"></script>
+        <!-- 侧边栏背景遮罩 -->
+        <div class="sidebar-backdrop" id="sidebar-backdrop" onclick="toggleSidebar()"></div>
+        
         <!-- 侧边栏，包含导航链接和关闭按钮 -->
         <div id="sidebar">
-            <button class="sidebar-close-btn" onclick="toggleSidebar()">×</button>
+            <div class="sidebar-header">
+                <h3 class="sidebar-title">截码战</h3>
+                <button class="sidebar-close-btn" onclick="toggleSidebar()">×</button>
+            </div>
             <ul>
-                <li><a href="index.html">截码战</a></li>
-                <li><a href="aux_program.html" class="current">辅助程序界面</a></li>
+                <li><a href="index.html"><i class="nav-icon">🏠</i> <span>主页</span></a></li>
+                <li><a href="aux_program.html" class="current"><i class="nav-icon">🔧</i> <span>辅助程序</span></a></li>
             </ul>
+            <div class="sidebar-footer">
+                <p>© 2023 截码战</p>
+            </div>
         </div>
         <!-- 侧边栏开关按钮 -->
         <button id="sidebar-toggle" onclick="toggleSidebar()">☰</button>
@@ -461,74 +206,9 @@
     </div>
 
     <!-- 按钮组，包含确认添加和全部清空按钮 -->
-    <div class="button-group">
-        <button class="action-btn" onclick="confirmInputs()">确认添加</button>
-        <button class="action-btn clear-btn" onclick="clearAll()">全部清空</button>
+    <div class="action-buttons button-group">
+        <button class="action-btn" data-action="confirm-inputs">确认添加</button>
+        <button class="action-btn clear-btn" data-action="clear-all">全部清空</button>
     </div>
-
-    <script>
-        // 从localStorage恢复内容
-        function loadContent() {
-            for (let i = 1; i <= 4; i++) {
-                const content = localStorage.getItem(`content${i}`);
-                if (content) {
-                    document.getElementById(`content${i}`).innerHTML = content;
-                }
-            }
-        }
-
-        // 保存内容到localStorage
-        function saveContent() {
-            for (let i = 1; i <= 4; i++) {
-                const content = document.getElementById(`content${i}`).innerHTML;
-                localStorage.setItem(`content${i}`, content);
-            }
-        }
-
-        /* 确认输入内容并添加到相应可编辑区域 */
-        function confirmInputs() {
-            showModal('确认要添加这些内容吗？', function() {
-            
-                const inputs = document.querySelectorAll('.input-group');
-                inputs.forEach(group => {
-                    const textInput = group.querySelector('.text-input');
-                    const indexInput = group.querySelector('.index-input');
-                    
-                    if (textInput.value && indexInput.value) {
-                        const target = document.getElementById(`content${indexInput.value}`);
-                        if (target) {
-                            // 自动生成序号
-                            const childCount = target.children.length;
-                            const content = `${childCount + 1}. ${textInput.value}`;
-                            target.innerHTML += `<div>${content}</div>`;
-                            textInput.value = '';
-                            indexInput.value = '';
-                        }
-                    }
-                });
-                saveContent();
-            });
-        }
-
-        /* 清空所有可编辑区域的内容 */
-        function clearAll() {
-            showModal('确定要清空所有内容吗？', function() {
-            
-                document.querySelectorAll('.editable-content').forEach(area => {
-                    area.innerHTML = '';
-                });
-                document.querySelectorAll('.text-input, .index-input').forEach(input => {
-                    input.value = '';
-                });
-                saveContent();
-            });
-        }
-
-        // 初始化
-        window.onload = function() {
-            loadContent();
-        };
-
-    </script>
 </body>
 </html>
