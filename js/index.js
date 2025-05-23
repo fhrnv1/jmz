@@ -31,8 +31,7 @@ const WordManager = {
      * 加载词库
      */
     loadWords() {
-        // 显示加载指示器
-        UIManager.showLoadingIndicator();
+        // 不显示加载指示器，直接加载
         
         fetch('assets/words.json')
             .then(response => {
@@ -52,16 +51,10 @@ const WordManager = {
                 
                 // 根据类别设置生成可用词语列表
                 this.generateAvailableWords();
-                
-                // 隐藏加载指示器
-                UIManager.hideLoadingIndicator();
             })
             .catch(err => {
                 console.error('词库加载错误:', err);
                 UIManager.showAlert('词库加载失败: ' + err.message);
-                
-                // 出错时也隐藏加载指示器
-                UIManager.hideLoadingIndicator();
             });
     },
     
